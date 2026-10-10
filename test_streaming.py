@@ -5,7 +5,7 @@ shipped source the four defect tests fail. With the patch applied all of them
 pass.
 
     pip install -r requirements.txt
-    git clone https://github.com/DeepLcom/deepl-python
+    git clone https://github.com/DeepL/deepl-python
     DEEPL_CHECKOUT=./deepl-python pytest test_streaming.py -v
 
 The tests after the defect tests are guards. They pin the behaviour the fix has

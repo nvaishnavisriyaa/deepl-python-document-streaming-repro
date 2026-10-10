@@ -2,7 +2,7 @@ Output of:
 
     python reproduce.py ./deepl-python 1 4 10 20
 
-against a fresh DeepLcom/deepl-python checkout at v1.32.0, Python 3.12 on
+against a fresh DeepL/deepl-python checkout at v1.32.0, Python 3.12 on
 Windows 11. These are the numbers quoted in the README. Absolute times depend
 on the machine; the ratios and the memory shape do not.
 

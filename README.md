@@ -2,7 +2,7 @@
 
 Reproduction, measurements and a patch for two defects in the document
 translation path of
-[DeepLcom/deepl-python](https://github.com/DeepLcom/deepl-python).
+[DeepL/deepl-python](https://github.com/DeepL/deepl-python).
 
 Checked against **v1.32.0**, and against `main` at `7257b99`.
 
@@ -60,7 +60,7 @@ endpoints on localhost, so the only thing under measurement is the client.
 
 ```bash
 pip install -r requirements.txt
-git clone https://github.com/DeepLcom/deepl-python
+git clone https://github.com/DeepL/deepl-python
 python reproduce.py ./deepl-python            # both tables above
 ```
 
