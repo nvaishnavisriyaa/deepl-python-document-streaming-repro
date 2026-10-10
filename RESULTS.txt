@@ -1,0 +1,45 @@
+Output of:
+
+    python reproduce.py ./deepl-python 1 4 10 20
+
+against a fresh DeepLcom/deepl-python checkout at v1.32.0, Python 3.12 on
+Windows 11. These are the numbers quoted in the README. Absolute times depend
+on the machine; the ratios and the memory shape do not.
+
+========================================================================
+Time for one document translation, end to end
+========================================================================
+shipped      1.00MB  chunk_size=1         0.412s
+shipped      4.00MB  chunk_size=1         1.081s
+shipped     10.00MB  chunk_size=1         3.012s
+shipped     20.00MB  chunk_size=1         8.028s
+
+chunk        1.00MB  chunk_size=8192      0.141s
+chunk        4.00MB  chunk_size=8192      0.150s
+chunk       10.00MB  chunk_size=8192      0.193s
+chunk       20.00MB  chunk_size=8192      0.278s
+
+buffer       1.00MB  chunk_size=1         7.395s
+buffer       4.00MB  chunk_size=1        36.448s
+buffer      10.00MB  chunk_size=1        97.644s
+buffer      20.00MB  chunk_size=1       191.723s
+
+both         1.00MB  chunk_size=8192      0.142s
+both         4.00MB  chunk_size=8192      0.141s
+both        10.00MB  chunk_size=8192      0.170s
+both        20.00MB  chunk_size=8192      0.171s
+
+========================================================================
+Peak memory in the client process
+========================================================================
+shipped      1.00MB  chunk_size=1     peak     4.1MB  =  4.1x the document
+shipped      4.00MB  chunk_size=1     peak    16.1MB  =  4.0x the document
+shipped     10.00MB  chunk_size=1     peak    40.1MB  =  4.0x the document
+shipped     20.00MB  chunk_size=1     peak    80.1MB  =  4.0x the document
+
+both         1.00MB  chunk_size=8192  peak     0.1MB  =  0.1x the document
+both         4.00MB  chunk_size=8192  peak     0.1MB  =  0.0x the document
+both        10.00MB  chunk_size=8192  peak     0.1MB  =  0.0x the document
+both        20.00MB  chunk_size=8192  peak     0.1MB  =  0.0x the document
+
+restored ./deepl-python

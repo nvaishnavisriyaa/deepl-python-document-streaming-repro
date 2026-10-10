@@ -1,0 +1,38 @@
+diff --git a/deepl/deepl_client.py b/deepl/deepl_client.py
+index a5de714..b5ab7cb 100644
+--- a/deepl/deepl_client.py
++++ b/deepl/deepl_client.py
+@@ -1296,7 +1296,7 @@ class DeepLClient(Translator):
+         self,
+         job: TranslationMemoryJob,
+         output_file: Union[BinaryIO, Any, None] = None,
+-        chunk_size: int = 1,
++        chunk_size: int = 8192,
+     ) -> Optional[requests.Response]:
+         """Downloads the TMX file of a completed export job.
+ 
+diff --git a/deepl/translator.py b/deepl/translator.py
+index c6d2b32..b17a0d9 100644
+--- a/deepl/translator.py
++++ b/deepl/translator.py
+@@ -160,7 +160,10 @@ class Translator:
+             except json_module.JSONDecodeError:
+                 pass
+         else:
+-            content_str = content.text
++            # Streamed response. Reading .text here would download and decode
++            # the whole body before the caller gets to stream it, which
++            # defeats the streaming that was asked for.
++            content_str = "<streamed response>"
+ 
+         util.log_info("DeepL API response", url=url, status_code=status_code)
+         util.log_debug("Response details", content=content_str)
+@@ -1038,7 +1041,7 @@ class Translator:
+         self,
+         handle: DocumentHandle,
+         output_file: Union[TextIO, BinaryIO, Any, None] = None,
+-        chunk_size: int = 1,
++        chunk_size: int = 8192,
+     ) -> Optional[requests.Response]:
+         """Downloads the translated document for the request associated with
+         given handle and returns a response object for streaming the data. Call

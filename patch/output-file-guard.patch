@@ -1,0 +1,54 @@
+diff --git a/deepl/translator.py b/deepl/translator.py
+index c6d2b32..67a6b48 100644
+--- a/deepl/translator.py
++++ b/deepl/translator.py
+@@ -33,6 +33,7 @@ import json as json_module
+ import os
+ import pathlib
+ import requests  # type: ignore
++import tempfile
+ import time
+ from typing import (
+     Any,
+@@ -721,10 +722,19 @@ class Translator:
+         out_ext = pathlib.PurePath(output_path).suffix.lower()
+         output_format = None if in_ext == out_ext else out_ext[1:]
+ 
++        # Translate into a temporary file beside the output path and move it
++        # into place once the translation has succeeded. Writing straight to
++        # output_path truncates anything already there before any work starts,
++        # and the failure path below then deletes it, so a failed call used to
++        # destroy an existing file at that path.
++        directory = os.path.dirname(os.path.abspath(output_path))
+         with open(input_path, "rb") as in_file:
+-            with open(output_path, "wb") as out_file:
+-                try:
+-                    return self.translate_document(
++            descriptor, partial_path = tempfile.mkstemp(
++                dir=directory, suffix=out_ext
++            )
++            try:
++                with os.fdopen(descriptor, "wb") as out_file:
++                    status = self.translate_document(
+                         in_file,
+                         out_file,
+                         target_lang=target_lang,
+@@ -741,10 +751,14 @@ class Translator:
+                         timeout_s=timeout_s,
+                         extra_body_parameters=extra_body_parameters,
+                     )
+-                except Exception as e:
+-                    out_file.close()
+-                    os.unlink(output_path)
+-                    raise e
++                os.replace(partial_path, output_path)
++                return status
++            except Exception as e:
++                try:
++                    os.unlink(partial_path)
++                except OSError:
++                    pass
++                raise e
+ 
+     def translate_document(
+         self,
