@@ -6,6 +6,9 @@ translation path of
 
 Checked against **v1.32.0**, and against `main` at `7257b99`.
 
+Reported upstream as
+[deepl-python#168](https://github.com/DeepL/deepl-python/issues/168).
+
 Both defects are in `deepl/translator.py`. They sit on either side of the same
 `stream=True` download, and they hide each other:
 
